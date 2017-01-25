@@ -13,12 +13,14 @@ app.get('/', function(req, res){
 	res.send('Todo API Root');
 });
 
+// GET /todos
 app.get('/todos', function(req, res){
 	res.json(todos);
 });
 
+// GET /todos/:id
 app.get('/todos/:id', function(req, res){
-	var todoId = parseInt(req.params.id);
+	var todoId = parseInt(req.params.id, 10);
 	var todoItem = _.findWhere(todos, {id:todoId});
 
 	if(todoItem) {
@@ -41,6 +43,19 @@ app.post('/todos', function(req, res){
 	todos.push(body);
 
 	res.json(body);
+});
+
+// DELETE /todos/:id
+app.delete('/todos/:id', function(req, res) {
+	var todoId = parseInt(req.params.id, 10);
+	var todoItem = _.findWhere(todos, { id: todoId });
+
+	if(!todoItem) {
+		res.status(404).json({ "error": "no todo found with that id" });
+	} else {
+		todos = _.without(todos, todoItem);
+		res.json(todoItem); 
+	}
 });
 
 app.listen(PORT, function(){
