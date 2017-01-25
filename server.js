@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var PORT = process.env.PORT || 3000;
-var todosFinder = require('./todosFinder.js');
+
 var todos = [{
 	id: 1,
 	description: 'Finish section 6 of nodejs course',
