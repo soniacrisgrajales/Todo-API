@@ -13,17 +13,21 @@ app.get('/', function(req, res){
 	res.send('Todo API Root');
 });
 
-// GET /todos
+// GET /todos?completed=false&q=work
 app.get('/todos', function(req, res){
 	var queryParams = req.query;
 	var filteredTodos = todos;
-
-	console.log(queryParams);
 
 	if(queryParams.hasOwnProperty('completed') && queryParams.completed === 'true'){
 		filteredTodos = _.where(todos, { completed: true });
 	} else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
 		filteredTodos = _.where(todos, { completed: false });
+	}
+
+	if( queryParams.hasOwnProperty('q') && queryParams.q.trim().length > 0 ){
+		filteredTodos = _.filter(filteredTodos, function(item) {
+			return item.description.toLowerCase().indexOf(queryParams.q.toLowerCase().trim()) > -1;
+		});
 	}
 
 	res.json(filteredTodos);
